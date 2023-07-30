@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+mlflow = "*"
+scikit-learn = "*"
+prefect = "*"
+pandas = "*"
+boto3 = "*"
+sentence-transformers = "*"
+seaborn = "*"
+prefect-aws = "*"
+
+[dev-packages]
+ipykernel = "*"
+jupyter-contrib-nbextensions = "*"
+jupyter = "*"
+
+[requires]
+python_version = "3.10"
