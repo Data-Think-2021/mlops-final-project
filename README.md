@@ -16,7 +16,7 @@ The MLops project consists 6 main components: ML modeling, Experiments tracking,
 * Cloud: AWS
 * Experiment tracking tools: MLFlow
 * Workflow orchestration: Prefect  
-~~* Monitoring: Evidently ~~  
+~~* Monitoring: Evidently~~  
 ~~* CI/CD: Github actions~~  
 ~~* Infrastructure as code (IaC): Terraform~~  
 
