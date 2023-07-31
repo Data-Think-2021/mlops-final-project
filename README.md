@@ -78,6 +78,7 @@ AWS EC2 as tracking server host, save artifacts to AWS S3.
 use ```mlflow ui```, open http://127.0.0.1:5000 to see all your experiments. 
 If you are satisfied with one model, you can register model. 
 
+Artifacts  
 ![mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
 
 * Create a model training pipeline
@@ -89,7 +90,8 @@ Convert the code into different tasks using prefect to orchestrate the whole pip
 mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri postgresql://mlflow:mlflowadmin@...../mlflow_db --default-artifact-root s3://mflow-remote
 ```
 
-![mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
+Registered Model  
+![mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/2_nvjzzr.png)
 
 
 
