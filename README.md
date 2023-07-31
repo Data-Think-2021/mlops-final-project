@@ -86,7 +86,7 @@ To turn the notebook into a script, use```jupyter nbconvert --to script bbc_news
 Convert the code into different tasks using prefect to orchestrate the whole pipeline.
 
 ```shell
-mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri postgresql://mlflow:mlflowadmin@mlflow-database.cmzjefzzw99w.eu-central-1.rds.amazonaws.com:5432/mlflow_db --default-artifact-root s3://mflow-remote
+mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri postgresql://mlflow:mlflowadmin@...../mlflow_db --default-artifact-root s3://mflow-remote
 ```
 
 ![mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
