@@ -1,113 +1,120 @@
+## 1. Background
+
+People are excited of LLM and GenAI. I worked recently a lot on text data. Unfortunately, the ChatGPT model can't cluster the text data. However, we can use the pre-trained language model to do the embeddings to capture their semantic meaning. Then with unsupervised learning models like Kmeans I build this end-to-end ML project as final project of this Zoomcamp. 
 
 
-## Problem statement
-
-For the project, we will ask you to build an end-to-end ML project. 
-
-
+## 2. Data
 * Dataset was downloaded from [BBC-News Data on Kaggle](https://www.kaggle.com/datasets/gpreda/bbc-news). 
-* I want to use K-Means to do clustering. 
 
-Environment 
+## 3. Overview and Architecture
+The MLops project consists 6 main components: ML modeling, Experiments tracking, Workflow orchetration, Batch Deployment, Monitoring, and Managing cloud resource with Terraform. Due to the limited time, I was not able to implement all of them. 
+[flowchart](https://res.cloudinary.com/do5aglxsw/image/upload/v1690832009/mlops-final-project-bbc-clustering/flowchart_mlops.drawio_tzkwxs.png)
 
-* Create a conda environment and activate
 
-```shell
-conda create -n mlops-env
+## 4. Technologies 
 
-conda activate mlops-env
-```
+* Cloud: AWS
+* Experiment tracking tools: MLFlow
+* Workflow orchestration: Prefect
+~~* Monitoring: Evidently ~~
+~~* CI/CD: Github actions~~
+~~* Infrastructure as code (IaC): Terraform~~
+
+## 5. Steps to reproduce
+### 5.1 Setup environment 
+* Create a virtual environment
 
 * Install libraries
 ```shell
 pipenv install mlflow scikit-learn prefect pandas boto3 sentence-transformers seaborn
 ```
 
-* Activate the virtual environment, run
-```shell
-pipenv shell
-```
+* Activate the virtual environment, run ```shellpipenv shell```
 
 * Show the path of  the virtual env, run ```pipenv --venv```
 /Users/xiahe/.local/share/virtualenvs/mlops-final-project-70huLeJa 
+
 * Set the python interpreter in VS code. ctrl+shift+p -> choose python interpreter -> add the python above /Users/xiahe/.local/share/virtualenvs/mlops-final-project-70huLeJa/**bin/python**
 
 
+### 5.2 AWS 
+
+First create a permission policy so that Boto3 can write and list S3 Bucket.
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::mlflow-remote/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::mlflow-remote"
+            ]
+        }
+    ]
+}
+```
+
+### 5.3 Clustering Steps
+1. Read data
+2. Do embedding
+3. Prepare input matrix for KMeans model
+4. Clustering with Kmeans
+
+### 5.4 Experiment monitoring with MLflow with remote host server on AWS
+AWS EC2 as tracking server host, save artifacts to AWS S3. 
 * Train a model on that dataset tracking your experiments
-K-means clustering
 use ```mlflow ui```, open http://127.0.0.1:5000 to see all your experiments. 
 If you are satisfied with one model, you can register model. 
+
+[mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
 
 * Create a model training pipeline
 ```pipenv install --dev jupyter_contrib_nbextensions```  
 To turn the notebook into a script, use```jupyter nbconvert --to script bbc_news_clustering.ipynb```. 
 Convert the code into different tasks using prefect to orchestrate the whole pipeline.
 
-1. Read data
-2. Do embedding
-3. Prepare input matrix for KMeans model
-4. Clustering with Kmeans
-5. Experiment tracking with AWS EC2 as tracking server host, save artifacts to AWS S3. 
+```shell
+mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri postgresql://mlflow:mlflowadmin@mlflow-database.cmzjefzzw99w.eu-central-1.rds.amazonaws.com:5432/mlflow_db --default-artifact-root s3://mflow-remote
+```
 
+[mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
+
+
+
+### 5.5 Use Prefect to do orchestration
 Start the Prefect server using ```prefect server start```. Check out the dashboard at http://127.0.0.1:4200. 
 ```pipenv install prefect_aws```  Create and save artifacts to s3 bucket. 
 
-* Deploy the model in batch, web service or streaming
+Run the python code and the artifacts are saved in s3 buckets.
+default artifacts URI: 's3://mflow-remote/1/95ff04c0e1a64edea415d5749d473e6f/artifacts'
 
-* Monitor the performance of your model
-
-
-* Follow the best practices 
+[Flow](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/3_ekn6jo.png)
 
 
-## Technologies 
+### 5.6 Deploy the model in batch
+Batch deployment. Fetch the model from s3 artifact. Feed the new data to the model and assign them the clusters. 
+Build the docker image:
+```shell
+docker build -t mlops-zoomcamp-bbc-news-clustering:v1 .
+```
 
-You don't have to limit yourself to technologies covered in the course. You can use alternatives as well:
-
-* Cloud: AWS, GCP, Azure or others
-* Experiment tracking tools: MLFlow, Weights & Biases, ... 
-* Workflow orchestration: Prefect, Airflow, Flyte, Kubeflow, Argo, ...
-* Monitoring: Evidently, WhyLabs/whylogs, ...
-* CI/CD: Github actions, Gitlab CI/CD, ...
-* Infrastructure as code (IaC): Terraform, Pulumi, Cloud Formation, ...
+### 5.7 Best practice
+unit tests
+    ```pipenv install --dev pytest```
 
 
-
-* Problem description
-    * 0 points: Problem is not described
-    * 1 point: Problem is described but shortly or not clearly 
-    * 2 points: Problem is well described and it's clear what the problem the project solves
-* Cloud
-    * 0 points: Cloud is not used, things run only locally
-    * 2 points: The project is developed on the cloud OR the project is deployed to Kubernetes or similar container management platforms
-    * 4 points: The project is developed on the cloud and IaC tools are used for provisioning the infrastructure
-* Experiment tracking and model registry
-    * 0 points: No experiment tracking or model registry
-    * 2 points: Experiments are tracked or models are registred in the registry
-    * 4 points: Both experiment tracking and model registry are used
-* Workflow orchestration
-    * 0 points: No workflow orchestration
-    * 2 points: Basic workflow orchestration
-    * 4 points: Fully deployed workflow 
-* Model deployment
-    * 0 points: Model is not deployed
-    * 2 points: Model is deployed but only locally
-    * 4 points: The model deployment code is containerized and could be deployed to cloud or special tools for model deployment are used
-* Model monitoring
-    * 0 points: No model monitoring
-    * 2 points: Basic model monitoring that calculates and reports metrics
-    * 4 points: Comprehensive model monitoring that send alerts or runs a conditional workflow (e.g. retraining, generating debugging dashboard, switching to a different model) if the defined metrics threshold is violated
-* Reproducibility
-    * 0 points: No instructions how to run code at all
-    * 2 points: Some instructions are there, but they are not complete
-    * 4 points: Instructions are clear, it's easy to run the code, and the code works. The version for all the dependencies are specified.
-* Best practices
-    * [ ] There are unit tests (1 point)
-    * [ ] There is an integration test (1 point)
-    * [ ] Linter and/or code formatter are used (1 point)
-    * [ ] There's a Makefile (1 point)
-    * [ ] There are pre-commit hooks (1 point)
-    * [ ] There's a CI/CD pipeline (2 points)
 
 
 
