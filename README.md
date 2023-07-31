@@ -8,7 +8,7 @@ People are excited of LLM and GenAI. I worked recently a lot on text data. Unfor
 
 ## 3. Overview and Architecture
 The MLops project consists 6 main components: ML modeling, Experiments tracking, Workflow orchetration, Batch Deployment, Monitoring, and Managing cloud resource with Terraform. Due to the limited time, I was not able to implement all of them. 
-[flowchart](https://res.cloudinary.com/do5aglxsw/image/upload/v1690832009/mlops-final-project-bbc-clustering/flowchart_mlops.drawio_tzkwxs.png)
+![flowchart](https://res.cloudinary.com/do5aglxsw/image/upload/v1690832009/mlops-final-project-bbc-clustering/flowchart_mlops.drawio_tzkwxs.png)
 
 
 ## 4. Technologies 
@@ -78,7 +78,7 @@ AWS EC2 as tracking server host, save artifacts to AWS S3.
 use ```mlflow ui```, open http://127.0.0.1:5000 to see all your experiments. 
 If you are satisfied with one model, you can register model. 
 
-[mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
+![mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
 
 * Create a model training pipeline
 ```pipenv install --dev jupyter_contrib_nbextensions```  
@@ -89,7 +89,7 @@ Convert the code into different tasks using prefect to orchestrate the whole pip
 mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri postgresql://mlflow:mlflowadmin@mlflow-database.cmzjefzzw99w.eu-central-1.rds.amazonaws.com:5432/mlflow_db --default-artifact-root s3://mflow-remote
 ```
 
-[mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
+![mlflow artifact](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/1_ztivqa.png)
 
 
 
@@ -100,7 +100,7 @@ Start the Prefect server using ```prefect server start```. Check out the dashboa
 Run the python code and the artifacts are saved in s3 buckets.
 default artifacts URI: 's3://mflow-remote/1/95ff04c0e1a64edea415d5749d473e6f/artifacts'
 
-[Flow](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/3_ekn6jo.png)
+![Flow](https://res.cloudinary.com/do5aglxsw/image/upload/v1690834278/mlops-final-project-bbc-clustering/3_ekn6jo.png)
 
 
 ### 5.6 Deploy the model in batch
