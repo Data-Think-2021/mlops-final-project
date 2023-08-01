@@ -9,7 +9,6 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 from sentence_transformers import SentenceTransformer
-
 import mlflow
 
 from prefect import task, flow, get_run_logger

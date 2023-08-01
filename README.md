@@ -38,6 +38,11 @@ pipenv install mlflow scikit-learn prefect pandas boto3 sentence-transformers se
 
 
 ### 5.2 AWS 
+Set the environment variables for AWS configuration.
+```shell
+export AWS_ACCESS_KEY_ID=[AWS_ACCESS_KEY_ID]
+export AWS_SECRET_ACCESS_KEY=[AWS_SECRET_ACCESS_KEY]
+```
 
 First create a permission policy so that Boto3 can write and list S3 Bucket.
 ```json
@@ -107,10 +112,20 @@ default artifacts URI: 's3://mflow-remote/1/95ff04c0e1a64edea415d5749d473e6f/art
 
 ### 5.6 Deploy the model in batch
 Batch deployment. Fetch the model from s3 artifact. Feed the new data to the model and assign them the clusters. 
+```python kmeans_model.py data/bbc_news.csv.zip data/output_cluster.parquet```
+
+
 Build the docker image:
+
 ```shell
 docker build -t mlops-zoomcamp-bbc-news-clustering:v1 .
 ```
+
+Run the docker image on local env
+```shell
+docker run -it --rm -e AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" -e AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" --name mlops-project mlops-zoomcamp-bbc-news-clustering:v1
+```
+
 
 ### 5.7 Best practice
 unit tests
